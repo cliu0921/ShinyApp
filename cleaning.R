@@ -67,4 +67,4 @@ nassau3 = nassau %>% filter(.,Bedrooms != 41)
 str(nassau3)
 
 
-nassau %>% filter(.,Town == "Great Neck", Bedrooms == 0)
+max(nassau[nassau$Year == 2017,"SoldPrice"])

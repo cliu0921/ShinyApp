@@ -15,4 +15,5 @@ design = append(sort(unique(nassau$DesignType)),'All',after = 0)
 number_bedrooms = sort(unique(nassau$Bedrooms))
 maxprice = max(nassau$SoldPrice)
 minprice = min(nassau$SoldPrice)
+yearsDOM = append(sort(unique(nassau$Year)),'All',after = 0)
 

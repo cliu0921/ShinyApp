@@ -7,8 +7,8 @@ dashboardPage(
     sidebarMenu(
       menuItem("Town Overview/Snapshot",tabName = 'overview'), #add icon
       menuItem('Yearly Trend',tabName = 'trend'), #add icon late
-      menuItem('Days On Market', tabName = 'days on market' ), #add icon later
-      menuItem('Yearly Sales', tabName = 'annual sales') #add icon late
+      menuItem('Days On Market', tabName = 'DOM'), #add icon later
+      menuItem('Yearly Sales', tabName = 'sales') #add icon late
     )
   ),
   dashboardBody(
@@ -36,20 +36,16 @@ dashboardPage(
                     selectizeInput('typeselected','Select Design Type', choices = design)))), #potentially merge 3 options into 1 box
 
       #3page
-      tabItem(tabName = 'days on market',
+      tabItem(tabName = 'DOM',
               h2('TBA'),
               fluidRow(
+                box(title = 'Year',
+                    selectizeInput('DOMyear','Select Year', choices = yearsDOM)),
                 box(title = 'Price Range',
-                    sliderInput('domslider','Price Range of Home Sales', minprice,maxprice,maxprice))
-                box(plotOutput('days on market',height = 250)),
-                box()
+                    sliderInput('domslider','Price Range of Home Sales:', min = minprice,max = maxprice,value = maxprice)),
+                box(plotOutput('DOM',height = 250))
               )
-      )
-      
-      
-      
-      
-      
-      )
+            )
+    )
   )
 )

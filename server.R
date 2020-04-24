@@ -31,7 +31,18 @@ function(input, output,session) {
     
   })
 
-  
+  #plotDOM
+  observeEvent(input$DOMyear,{
+    if(input$DOMyear == 'All'){
+      DOM_max_price = max(nassau$SoldPrice)
+      DOM_min_price = min(nassau$SoldPrice)
+    } else {
+      DOM_max_price = max(nassau[nassau$Year == (input$DOMyear),"SoldPrice"])
+      DOM_min_price = min(nassau[nassau$Year == (input$DOMyear),"SoldPrice"])
+    }
+    updateSliderInput(session, inputId = 'domslider', min = DOM_min_price, max = DOM_max_price, value = DOM_max_price)
+  })
+
   
 
     
