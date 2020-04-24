@@ -13,5 +13,6 @@ unique(nassau$Bedrooms)
 town_names = sort(unique(nassau$Town))
 design = append(sort(unique(nassau$DesignType)),'All',after = 0)
 number_bedrooms = sort(unique(nassau$Bedrooms))
-
+maxprice = max(nassau$SoldPrice)
+minprice = min(nassau$SoldPrice)
 

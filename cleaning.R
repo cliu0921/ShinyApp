@@ -65,17 +65,6 @@ nassautest = unique(nassau[nassau$Bedrooms == 41,'SoldPrice'])
 nassautest
 nassau3 = nassau %>% filter(.,Bedrooms != 41)
 str(nassau3)
-#REMOVE ELMONT 41 ROOM
 
-test =nassau %>% group_by(.,Town,Sold,Bedrooms,DesignType) %>% summarise(.,ave_price = mean(SoldPrice)) %>% filter(.,Town == "Great Neck", Bedrooms == 4,
-                                                                                                 )
-test
 
-ggplot(nassau %>% group_by(.,Town,Sold,Bedrooms,DesignType) %>% summarise(.,ave_price = mean(SoldPrice)) %>% filter(.,Town == "Great Neck", Bedrooms == 4,
-),aes(x=Sold,y=ave_price)) + geom_bar(stat= 'identity')
-#test = real_estate5$SellYM[1]
-#test
-#test =paste0(test,'-01')
-#test2 = as.Date(test,format ='%Y-%m-%d')
-#test2
-#class(test2)
+nassau %>% filter(.,Town == "Great Neck", Bedrooms == 0)

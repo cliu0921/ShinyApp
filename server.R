@@ -33,19 +33,7 @@ function(input, output,session) {
 
   
   
-  #trend_df= nassau %>% filter(.,)
-  #observeEvent(
-  #output$trend = ifelse((input$typeselected) == 'All',
-  #  renderPlot({ggplot(nassau %>% group_by(.,Town,Sold,Bedrooms) %>% summarise(.,ave_price = mean(SoldPrice)) %>% filter(.,Town == (input$townselected),
-  #                      aes(x = Sold,y= ave_price)) + geom_bar(stat= 'identity'))
-  #    
-  #  }),
-  #  
-  #  renderPlot({
-  #         ggplot(nassau %>% group_by(.,Town,Sold,Bedrooms,DesignType) %>% summarise(.,ave_price = mean(SoldPrice)) 
-  #                %>% filter(.,Town == (input$townselected),Bedrooms == (input$bedroomsselected),DesignType == (input$typeselected)),
-  #                aes(x = Sold, y = ave_price)) + geom_bar(stat= 'identity')})
-  #  ))
+
     
     
   } #final bracket
