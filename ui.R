@@ -30,8 +30,8 @@ dashboardPage(
                     selectizeInput('townselected','Select Town', choices = town_names)),
                 box(title = 'Number of Bedrooms',
                     selectizeInput('bedroomsselected','Select Number of Bedrooms',choices = number_bedrooms)),
-                #box(title = 'Design Type',
-                    #selectizeInput('typeselected','Select Design Type', choices = design)) #potentially merge 3 options into 1 box
+                box(title = 'Design Type',
+                    selectizeInput('typeselected','Select Design Type', choices = design)) #potentially merge 3 options into 1 box
                 
               ))
       

@@ -67,9 +67,12 @@ nassau3 = nassau %>% filter(.,Bedrooms != 41)
 str(nassau3)
 #REMOVE ELMONT 41 ROOM
 
-nassau %>% group_by(.,Town,Sold,Bedrooms,DesignType) %>% summarise(.,mean(SoldPrice)) %>% filter(.,Town == "Great Neck", Bedrooms == 4,
+test =nassau %>% group_by(.,Town,Sold,Bedrooms,DesignType) %>% summarise(.,ave_price = mean(SoldPrice)) %>% filter(.,Town == "Great Neck", Bedrooms == 4,
                                                                                                  )
+test
 
+ggplot(nassau %>% group_by(.,Town,Sold,Bedrooms,DesignType) %>% summarise(.,ave_price = mean(SoldPrice)) %>% filter(.,Town == "Great Neck", Bedrooms == 4,
+),aes(x=Sold,y=ave_price)) + geom_bar(stat= 'identity')
 #test = real_estate5$SellYM[1]
 #test
 #test =paste0(test,'-01')

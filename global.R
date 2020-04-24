@@ -11,9 +11,7 @@ nassau = nassau %>% mutate(.,Sold = as.Date(Sold))
 str(nassau)
 unique(nassau$Bedrooms)
 town_names = sort(unique(nassau$Town))
-design = unique(nassau$DesignType)
+design = append(sort(unique(nassau$DesignType)),'All',after = 0)
 number_bedrooms = sort(unique(nassau$Bedrooms))
 
-town_names[1]
-town_names2 = town_names[1]="all"
-town_names2
+
