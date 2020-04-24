@@ -40,10 +40,23 @@ function(input, output,session) {
       DOM_max_price = max(nassau[nassau$Year == (input$DOMyear),"SoldPrice"])
       DOM_min_price = min(nassau[nassau$Year == (input$DOMyear),"SoldPrice"])
     }
-    updateSliderInput(session, inputId = 'domslider', min = DOM_min_price, max = DOM_max_price, value = DOM_max_price)
+    updateSliderInput(session, inputId = 'domslider', min = DOM_min_price, max = DOM_max_price, value = c(DOM_min_price,DOM_max_price))
   })
 
+  domtype = reactive({input$DOMyear})
   
+  output$DOM = renderPlot({
+    if(domtype()== 'All'){
+      ggplot(nassau %>% filter(.,SoldPrice >= input$domslider[1] & SoldPrice <= input$domslider[2]) %>% group_by(.,Town) %>% 
+               summarise(.,ave_dom = mean(DaysOnMarket)) %>% top_n(.,10,ave_dom),aes(x=reorder(Town,ave_dom),y=ave_dom)) + geom_bar(stat='identity')+
+      coord_flip()
+      #first condition
+    } else {ggplot(nassau %>% filter(.,SoldPrice >= input$domslider[1] & SoldPrice <= input$domslider[2], Year == input$DOMyear) %>% group_by(.,Town) %>% 
+                     summarise(.,ave_dom=mean(DaysOnMarket)) %>% top_n(.,10,ave_dom),aes(x=reorder(Town,ave_dom),y=ave_dom)) +geom_bar(stat='identity')+
+        coord_flip()
+      #seoncd
+    }
+  })
 
     
     

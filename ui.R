@@ -42,7 +42,7 @@ dashboardPage(
                 box(title = 'Year',
                     selectizeInput('DOMyear','Select Year', choices = yearsDOM)),
                 box(title = 'Price Range',
-                    sliderInput('domslider','Price Range of Home Sales:', min = minprice,max = maxprice,value = maxprice)),
+                    sliderInput('domslider','Price Range of Home Sales:', min = minprice,max = maxprice,value = c(min, max))),
                 box(plotOutput('DOM',height = 250))
               )
             )
