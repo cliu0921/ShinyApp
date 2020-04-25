@@ -4,11 +4,20 @@ library(DT)
 library(dbplyr)
 library(tidyverse)
 library(lubridate)
+library(plotly)
+
 
 csv_filenames <- list.files('./data', pattern = 'csv')
 csv_filepaths <- paste0( './data/', csv_filenames, sep = '' )
 all_dfs <- lapply( csv_filepaths, FUN = function( fp ) read.csv( fp, stringsAsFactors = F ) )
 whole_data = bind_rows(all_dfs)
+
+
+nassau %>% filter(.,Year == 2018) %>% group_by(.,Town) %>%  summarise(.,year_ave_sale= mean(SoldPrice),
+                                                                               year_ave_dom = mean(DaysOnMarket))
+
+
+
 
 street_remove = function(x){
   select(x,-1)
@@ -68,3 +77,92 @@ str(nassau3)
 
 
 max(nassau[nassau$Year == 2017,"SoldPrice"])
+
+
+ggplot(nassau %>% filter(.,SoldPrice >= 1000000 & SoldPrice<=100000000) %>% 
+         group_by(.,Town,Sold) %>% summarise(.,total_contracts = n()) %>% top_n(.,5,total_contracts),aes(x= Sold,y= total_contracts,color = Town))+
+  geom_line()
+
+nassau %>% filter(.,SoldPrice >= 1000000 & SoldPrice<=100000000) %>% 
+  group_by(.,Town,Year) %>% summarise(.,total_contracts = n())
+
+
+nassau %>% filter(.,Town == c('Hempstead','Levittown','Freeport','Westbury','Oceanside','Plainview')) %>% 
+  group_by(.,Town,Year) %>% summarise(.,total_contracts = n())
+
+
+
+top_town=c('Hempstead','Levittown','Freeport','Westbury','Oceanside','Plainview','Great Neck')
+
+nassau_sd = nassau
+nassau_sd$SD =ifelse(nassau$SD == 11, 'Carle Place Disctrict',nassau_sd$SD)
+nassau_sd$SD =ifelse(nassau$SD == 2, 'East Williston District',nassau_sd$SD)
+nassau_sd$SD =ifelse(nassau$SD == 7, 'Great Neck District',nassau_sd$SD)
+nassau_sd$SD =ifelse(nassau$SD == 9, 'Herricks Disctrict',nassau_sd$SD)
+nassau_sd$SD =ifelse(nassau$SD == 10, 'Mineola Disctrict',nassau_sd$SD)
+nassau_sd$SD =ifelse(nassau$SD == 13, 'Valley Stream Disctrict',nassau_sd$SD)
+nassau_sd$SD =ifelse(nassau$SD == 6, 'Manhasset Disctrict',nassau_sd$SD)
+nassau_sd$SD =ifelse(nassau$SD == 5, 'New Hyde Park/ Garden City Park Disctrict',nassau_sd$SD)
+nassau_sd$SD =ifelse(nassau$SD == 4, 'Port Washington Disctrict',nassau_sd$SD)
+nassau_sd$SD =ifelse(nassau$SD == 3, 'Roslyn Disctrict',nassau_sd$SD)
+nassau_sd$SD =ifelse(nassau$SD == 8, 'Roosevelt Disctrict',nassau_sd$SD)
+nassau_sd$SD =ifelse(nassau$SD == 15, 'Jericho Disctrict',nassau_sd$SD)
+nassau_sd$SD =ifelse(nassau$SD == 12, 'Lynnbrook Disctrict',nassau_sd$SD)
+nassau_sd$SD =ifelse(nassau$SD == 14, 'Woodmere Disctrict',nassau_sd$SD)
+nassau_sd$SD =ifelse(nassau$SD == 1, 'Westbury Disctrict',nassau_sd$SD)
+unique(nassau_sd$SD)
+
+write.csv(nassau_sd,"./data/nassau.csv")
+nassau = read.csv('./data/nassau.csv',stringsAsFactors = FALSE)
+nassau$Sold[1]
+str(nassau)
+nassau = nassau %>% mutate(.,Sold = as.Date(Sold))
+nassau = nassau %>% filter(.,Bedrooms != 41)
+
+test = nassau %>% group_by(.,Town) %>% summarise(.,ave_sale = mean(SoldPrice),ave_dom = mean(DaysOnMarket))
+test
+
+nassau_ave_price = mean(nassau$SoldPrice)
+nassau_ave_dom = mean(nassau$DaysOnMarket)
+nassau_ave_dom
+
+ggplotly(ggplot(test,aes(x=ave_dom,y=ave_sale)) + geom_point(), hoverinfo= 'text',text = ~paste(Town, '</br></br>','Days on Market:', round(ave_dom, digits = 0),'</br>',
+             'Sale Price:', round(ave_sale,digits = 0)))
+
+
+mean_dom = mean(as.numeric(nassau$DaysOnMarket))
+nassau %>% filter(.,is.na(DaysOnMarket))
+
+mean_price = mean(nassau$SoldPrice)
+
+x = ggplot(test)+geom_point(aes(x=ave_dom,y=ave_sale,group = Town, text= paste(Town, '</br></br>','Days on Market:', round(ave_dom, digits = 0),'</br>', 'Sale Price:', 
+                                                                           round(ave_sale,digits = 0)))) +
+  geom_vline(xintercept = nassau_ave_dom) + geom_hline(yintercept = mean_price)
+
+
+
+
+ggplotly(ggplot(nassau %>% group_by(.,Town) %>% summarise(.,ave_sale = mean(SoldPrice),ave_dom = mean(DaysOnMarket)))+geom_point(aes(x=ave_dom,y=ave_sale,group = Town, text= paste(Town, '</br></br>','Days on Market:', round(ave_dom, digits = 0),'</br>', 'Sale Price:', 
+                                                                                    round(ave_sale,digits = 0)))) +
+           geom_vline(xintercept = nassau_ave_dom) + geom_hline(yintercept = mean_price), tooltip = 'text')
+
+
+mean(nassau[nassau$Year == 2020,"DaysOnMarket"])
+
+plot_ly(data = test,x=~ave_dom,y=~ave_sale,hoverinfo = 'text',text = ~paste(Town, '</br></br>',
+                                                                            'Days on Market:', round(ave_dom, digits = 0),'</br>',
+                                                                            'Sale Price:', round(ave_sale,digits = 0))) %>% 
+  add_segments(x = nassau_ave_dom, xend= nassau_ave_dom,)
+
+
+nassau = nassau %>% filter(.,Town!= "Plandome Manor")
+write.csv(nassau_sd,"./data/nassau.csv")
+nassau = read.csv('./data/nassau.csv',stringsAsFactors = FALSE)
+nassau$Sold[1]
+str(nassau)
+nassau = nassau %>% mutate(.,Sold = as.Date(Sold))
+
+
+
+
+

@@ -17,7 +17,7 @@ dashboardPage(
       #firstpage
       tabItem(tabName = 'overview',
               h2('TBA')),
-      
+              
       
       
       #2page
@@ -43,7 +43,9 @@ dashboardPage(
                     selectizeInput('DOMyear','Select Year', choices = yearsDOM)),
                 box(title = 'Price Range',
                     sliderInput('domslider','Price Range of Home Sales:', min = minprice,max = maxprice,value = c(min, max))),
-                box(plotOutput('DOM',height = 250))
+                box(plotOutput('DOM',height = 250)),
+                box(plotOutput('DOM_reverse',height = 250)),
+                box(plotlyOutput('DOMscatter',height = 400))
               )
             ),
       #4page
@@ -54,7 +56,8 @@ dashboardPage(
                     selectizeInput('contract_year','Select Year', choices = yearscontract)),
                 box(title = 'Price Range',
                     sliderInput('contractslider','Price Range of Home Sales:', min = minprice,max = maxprice,value = c(min, max))),
-                box(plotOutput('sales',height = 250))
+                box(plotOutput('sales',height = 250)),
+                box(plotOutput('contracts_overtime', height=400))
               )
       )
     )
