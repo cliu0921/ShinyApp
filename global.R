@@ -16,4 +16,5 @@ number_bedrooms = sort(unique(nassau$Bedrooms))
 maxprice = max(nassau$SoldPrice)
 minprice = min(nassau$SoldPrice)
 yearsDOM = append(sort(unique(nassau$Year)),'All',after = 0)
+yearscontract = append(sort(unique(nassau$Year)),'All',after = 0)
 

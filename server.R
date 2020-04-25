@@ -58,8 +58,37 @@ function(input, output,session) {
     }
   })
 
+  #plot4
+  observeEvent(input$contract_year,{
+    if(input$contract_year == 'All'){
+      con_max_price = max(nassau$SoldPrice)
+      con_min_price = min(nassau$SoldPrice)
+    } else {
+      con_max_price = max(nassau[nassau$Year == (input$contract_year),"SoldPrice"])
+      con_min_price = min(nassau[nassau$Year == (input$contract_year),"SoldPrice"])
+    }
+    updateSliderInput(session, inputId = 'contractslider', min = con_min_price, max = con_max_price, value = c(con_min_price,con_max_price))
+  })
     
+  contracttype = reactive({input$contract_year})
+  
+  output$sales = renderPlot({
+    if( contracttype() == 'All'){
+      ggplot(nassau %>% filter(.,SoldPrice >= input$contractslider[1] & SoldPrice <= input$contractslider[2]) %>% group_by(.,Town) %>% 
+               summarise(.,total_contracts = n()) %>% top_n(.,10,total_contracts),aes(x = reorder(Town,total_contracts),y= total_contracts))+
+             geom_bar(stat = 'identity') + coord_flip()
+      
+    } else {
+      ggplot(nassau %>% filter(.,SoldPrice >= input$contractslider[1] & SoldPrice <= input$contractslider[2], Year == input$contract_year) %>% group_by(.,Town) %>% 
+               summarise(.,total_contracts = n()) %>% top_n(.,10,total_contracts),aes(x = reorder(Town,total_contracts),y= total_contracts))+
+               geom_bar(stat = 'identity') + coord_flip()
+    }
     
+  })
+  
+  
+  
+  
   } #final bracket
     
     

@@ -45,7 +45,18 @@ dashboardPage(
                     sliderInput('domslider','Price Range of Home Sales:', min = minprice,max = maxprice,value = c(min, max))),
                 box(plotOutput('DOM',height = 250))
               )
-            )
+            ),
+      #4page
+      tabItem(tabName = 'sales',
+              h2('TBA'),
+              fluidRow(
+                box(title = 'Year',
+                    selectizeInput('contract_year','Select Year', choices = yearscontract)),
+                box(title = 'Price Range',
+                    sliderInput('contractslider','Price Range of Home Sales:', min = minprice,max = maxprice,value = c(min, max))),
+                box(plotOutput('sales',height = 250))
+              )
+      )
     )
   )
 )
