@@ -28,12 +28,14 @@ dashboardPage(
               fluidRow( #ontop of eachotehr rather than side wrap
                 box(plotOutput('trend',height = 250)),
                 #make selected options NULL/ blank if time permits
-                box(title = 'Town',
-                    selectizeInput('townselected','Select Town', choices = town_names)),
-                box(title = 'Number of Bedrooms',
-                    selectizeInput('bedroomsselected','Select Number of Bedrooms',choices = number_bedrooms)),
-                box(title = 'Design Type',
-                    selectizeInput('typeselected','Select Design Type', choices = design)))), #potentially merge 3 options into 1 box
+                box(title = 'School District',
+                    selectizeInput('SDselected','Select School District', choices = disctrict_names)))),
+                #unused for now
+                #box(title = 'Number of Bedrooms',
+                #    selectizeInput('bedroomsselected','Select Number of Bedrooms',choices = number_bedrooms)),
+                #unused for now
+                #box(title = 'Design Type',
+                #    selectizeInput('typeselected','Select Design Type', choices = design)))), #potentially merge 3 options into 1 box
 
       #3page
       tabItem(tabName = 'DOM',
@@ -63,3 +65,4 @@ dashboardPage(
     )
   )
 )
+

@@ -4,32 +4,41 @@ function(input, output,session) {
   
   
   #plot trend
-  observeEvent(input$townselected,{
-    choices = sort(unique(nassau[nassau$Town == (input$townselected), "Bedrooms"]))
-    updateSelectizeInput(session,inputId = "bedroomsselected",choices = choices)
-  }) #filter choices based on input
-  
-  observeEvent(input$bedroomsselected,{
-    choices = unique(nassau[nassau$Bedrooms == (input$bedroomsselected), "DesignType"])
-    updateSelectizeInput(session, inputId = 'typeselected',choices = append(choices,'All',after = 0))
-  })
-  
- 
-  dtype = reactive({input$typeselected})
-  
   output$trend = renderPlot({
-    if (dtype() == 'All'){
-      ggplot(nassau %>% group_by(.,Town,Sold,Bedrooms) %>% summarise(.,ave_price = mean(SoldPrice)) %>% 
-               filter(.,Town == (input$townselected),Bedrooms == (input$bedroomsselected)), aes(x = Sold,y= ave_price))+
-      geom_line()
-    } else {
-      ggplot(nassau %>% group_by(.,Town,Sold,Bedrooms,DesignType) %>% summarise(.,ave_price = mean(SoldPrice)) %>% 
-                           filter(.,Town == (input$townselected),Bedrooms == (input$bedroomsselected),DesignType == (input$typeselected)), aes(x = Sold,y= ave_price))+
-        geom_line()
-      
-    }
+    ggplot(
+      nassau %>% group_by(.,SD,Sold) %>% summarise(.,ave_sd_price = mean(SoldPrice)) %>% filter(.,SD== input$SDselected),
+      aes(x= Sold, y=ave_sd_price)
+    ) + geom_line()
     
   })
+  
+  
+  #observeEvent(input$SDselected,{
+  #  choices = sort(unique(nassau[nassau$SD == (input$SDselected), "Bedrooms"]))
+  #  updateSelectizeInput(session,inputId = "bedroomsselected",choices = choices)
+  #}) #filter choices based on input
+  
+  #observeEvent(input$bedroomsselected,{
+  #  choices = unique(nassau[nassau$Bedrooms == (input$bedroomsselected), "DesignType"])
+  #  updateSelectizeInput(session, inputId = 'typeselected',choices = append(choices,'All',after = 0))
+  #})
+  
+ 
+  # dtype = reactive({input$typeselected})
+  # 
+  # output$trend = renderPlot({
+  #   if (dtype() == 'All'){
+  #     ggplot(nassau %>% group_by(.,SD,Sold,Bedrooms) %>% summarise(.,ave_price = mean(SoldPrice)) %>%
+  #              filter(.,SD == (input$SDselected),Bedrooms == (input$bedroomsselected)), aes(x = Sold,y= ave_price))+
+  #     geom_line()
+  #   } else {
+  #     ggplot(nassau %>% group_by(.,SD,Sold,Bedrooms,DesignType) %>% summarise(.,ave_price = mean(SoldPrice)) %>%
+  #                          filter(.,SD == (input$SDselected),Bedrooms == (input$bedroomsselected),DesignType == (input$typeselected)), aes(x = Sold,y= ave_price))+
+  #       geom_line()
+  # 
+  #   }
+  # 
+  # })
 
   #plotDOM
   observeEvent(input$DOMyear,{
