@@ -19,7 +19,9 @@ function(input, output,session) {
         filter(.,SD == input$SDselected), 
       aes(x = Town, y = ave_room_price_town, group = Bedrooms_cat, text = paste('Town:', Town, '</br></br>',
                                                                                 'Number of Rooms:', Bedrooms_cat,'</br>',
-                                                                                'Average Sold Price:', ave_room_price_town))) +
+                                                                                'Average Sold Price:', 
+                                                                                format(round(ave_room_price_town, digits = 0),
+                                                                                            nsmall = 1, big.mark = ",")))) +
         geom_bar(aes(fill= Bedrooms_cat),position = 'dodge',stat = 'identity')
     , tooltip = 'text'
     )
@@ -125,8 +127,8 @@ function(input, output,session) {
              geom_point(aes(x=year_ave_dom, y = year_ave_sale, group = Town,
                              text = paste(
                                Town, '</br></br>','Days on Market:',
-                               round(year_ave_dom, digits = 0),'</br>', 'Sale Price:',
-                               round(year_ave_sale,digits = 0)
+                               format(round(year_ave_dom, digits = 0),nsmall=1, big.mark = ','),'</br>', 'Sale Price:',
+                               format(round(year_ave_sale,digits = 0),small=1, big.mark= ',')
                              ))) +
         geom_vline(xintercept = mean(nassau[nassau$Year == input$DOMyear,"DaysOnMarket"])) +
         geom_hline(yintercept = mean(nassau[nassau$Year== input$DOMyear,"SoldPrice"])) ,
