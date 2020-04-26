@@ -6,6 +6,7 @@ dashboardPage(
     #sidebar tabs for diff graph navigation
     sidebarMenu(
       menuItem("Town Overview/Snapshot",tabName = 'overview'), #add icon
+      menuItem('Monthly Trend',tabName = 'monthly_trend'),
       menuItem('Yearly Trend',tabName = 'trend'), #add icon late
       menuItem('Days On Market', tabName = 'DOM'), #add icon later
       menuItem('Yearly Sales', tabName = 'sales') #add icon late
@@ -18,7 +19,15 @@ dashboardPage(
       tabItem(tabName = 'overview',
               h2('TBA')),
               
-      
+      #seasonal tab
+      tabItem(tabName = 'monthly_trend',
+              h2('TBA'),
+              fluidRow(
+                box(title= 'Monthly Analysis',
+                    selectizeInput('trend_type','Select Analysis Parameter', choices = contracts_saleprice)),
+                box(plotOutput('months',height = 250))
+        
+              )),
       
       #2page
       tabItem(tabName = 'trend',

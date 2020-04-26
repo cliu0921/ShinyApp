@@ -176,3 +176,11 @@ nassau %>% group_by(.,SD,Town,Bedrooms_cat) %>% summarise(.,ave_town_rooms_price
 
 nassau %>% filter(.,Town == "Oceanside", Bedrooms_cat == "4")
 
+ggplot(nassau %>% group_by(.,Month) %>% summarise(.,month_ave_price = mean(SoldPrice)),aes(x = as.integer(Month),y = month_ave_price)) + 
+  geom_bar(stat = 'identity') + scale_x_continuous(breaks = 1:12,
+                                                   labels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
+                                                   ) + coord_cartesian(ylim = c(600000,800000))
+
+
+
+

@@ -63,7 +63,27 @@ function(input, output,session) {
   #   }
   # 
   # })
-
+ #------------------------------------------------------------------------------------------------------------------------
+  
+  monthtype = reactive({input$trend_type})
+  
+  output$months = renderPlot({
+    if(monthtype() == 'Average Price of Home Sold'){
+      #price by month
+      ggplot(nassau %>% group_by(.,Month) %>% summarise(.,month_ave_price = mean(SoldPrice)),aes(x = as.integer(Month),y = month_ave_price)) + 
+        geom_bar(stat = 'identity') + scale_x_continuous(breaks = 1:12,
+                                                         labels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
+        ) + coord_cartesian(ylim = c(600000,800000))
+    } else {
+      #
+      ggplot(nassau %>% group_by(.,Month) %>% summarise(.,month_contracts= n()),aes(x=as.integer(Month),y = month_contracts)) +
+        geom_bar(stat = 'identity') + scale_x_continuous(breaks = 1:12,
+                                                         labels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))+
+        coord_cartesian(ylim = c(500,2700))
+    }
+  })
+  
+  #------------------------------------------------------------------------------------------------------------------------
   #plotDOM
   observeEvent(input$DOMyear,{
     if(input$DOMyear == 'All'){
