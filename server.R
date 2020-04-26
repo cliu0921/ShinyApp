@@ -12,6 +12,28 @@ function(input, output,session) {
     
   })
   
+  output$bedrooms_by_sd = renderPlotly({
+    ggplotly(
+    ggplot(
+      nassau %>% group_by(.,SD,Town,Bedrooms_cat) %>% summarise(.,ave_room_price_town = mean(SoldPrice)) %>% 
+        filter(.,SD == input$SDselected), 
+      aes(x = Town, y = ave_room_price_town, group = Bedrooms_cat, text = paste('Town:', Town, '</br></br>',
+                                                                                'Number of Rooms:', Bedrooms_cat,'</br>',
+                                                                                'Average Sold Price:', ave_room_price_town))) +
+        geom_bar(aes(fill= Bedrooms_cat),position = 'dodge',stat = 'identity')
+    , tooltip = 'text'
+    )
+  })
+  
+  
+  #------------------------------------------------------------------------------------------------------------------
+  #try one more with geom smooth
+  # output$trend2 = renderPlot({
+  #   ggplot(
+  #     nassau %>% filter(.,SD == input$SDselected),
+  #     aes(x= Sold,y= SoldPrice)
+  #   ) + geom_point() + geom_smooth(span = 0.01)
+  #})
   
   #observeEvent(input$SDselected,{
   #  choices = sort(unique(nassau[nassau$SD == (input$SDselected), "Bedrooms"]))

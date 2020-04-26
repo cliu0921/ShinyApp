@@ -29,7 +29,10 @@ dashboardPage(
                 box(plotOutput('trend',height = 250)),
                 #make selected options NULL/ blank if time permits
                 box(title = 'School District',
-                    selectizeInput('SDselected','Select School District', choices = disctrict_names)))),
+                    selectizeInput('SDselected','Select School District', choices = disctrict_names)),
+                box(plotlyOutput('bedrooms_by_sd',height = 250, width = 600)))),
+                    
+              
                 #unused for now
                 #box(title = 'Number of Bedrooms',
                 #    selectizeInput('bedroomsselected','Select Number of Bedrooms',choices = number_bedrooms)),

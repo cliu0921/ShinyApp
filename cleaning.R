@@ -163,6 +163,16 @@ str(nassau)
 nassau = nassau %>% mutate(.,Sold = as.Date(Sold))
 
 
+ocean = ggplot(nassau %>% group_by(.,SD,Town,Bedrooms_cat) %>% summarise(.,ave_town_rooms_price = mean(SoldPrice)) %>% filter(.,SD == 'Carle Place Disctrict'),
+       aes(x= Town, y = ave_town_rooms_price, group = Bedrooms_cat, text = paste(Bedrooms_cat,'</br></br>',
+                                                                            'Ave Price:', ave_town_rooms_price,
+                                                                            'Town',Town))) + geom_bar(aes(fill=Bedrooms_cat),position = 'dodge',stat= 'identity')
 
 
+
+ggplotly(ocean, tooltip = 'text')
+nassau %>% group_by(.,SD,Town,Bedrooms_cat) %>% summarise(.,ave_town_rooms_price = mean(SoldPrice)) %>% filter(.,SD == 'Carle Place Disctrict')
+
+
+nassau %>% filter(.,Town == "Oceanside", Bedrooms_cat == "4")
 
