@@ -21,7 +21,7 @@ function(input, output,session) {
     ggplot(
       nassau %>% group_by(.,SD,Sold) %>% summarise(.,ave_sd_price = mean(SoldPrice)) %>% filter(.,SD== input$SDselected),
       aes(x= Sold, y=ave_sd_price)
-    ) + geom_line()
+    ) + geom_smooth(se=FALSE)
     
   })
   
@@ -160,8 +160,8 @@ function(input, output,session) {
              geom_point(aes(x=year_ave_dom, y = year_ave_sale, group = Town,
                              text = paste(
                                Town, '</br></br>','Days on Market:',
-                               format(round(year_ave_dom, digits = 0),nsmall=1, big.mark = ','),'</br>', 'Sale Price:',
-                               format(round(year_ave_sale,digits = 0),small=1, big.mark= ',')
+                               format(round(year_ave_dom, digits = 0),nsmall=0, big.mark = ','),'</br>', 'Sale Price:',
+                               format(round(year_ave_sale,digits = 0),nsmall=0, big.mark= ',')
                              ))) +
         geom_vline(xintercept = mean(nassau[nassau$Year == input$DOMyear,"DaysOnMarket"])) +
         geom_hline(yintercept = mean(nassau[nassau$Year== input$DOMyear,"SoldPrice"])) ,
@@ -239,8 +239,8 @@ function(input, output,session) {
       ggplot(nassau %>% filter(.,Year == input$contract_year) %>% group_by(.,Town) %>% 
                summarise(.,total_sales_by_year = n(), ave_sale_price_by_year = mean(SoldPrice)),
              aes(x = total_sales_by_year, y = ave_sale_price_by_year, group = Town, text= paste(
-               'Town:', Town, '</br></br>', 'Total Sales:', format(total_sales,nsmall=1,big.mark = ','), '</br>', 'Average Sale Price', format(
-                 round(ave_sale_price,digits =0),nsmall =0, big.mark = ',')))) +
+               'Town:', Town, '</br></br>', 'Total Sales:', format(total_sales_by_year,nsmall=1,big.mark = ','), '</br>', 'Average Sale Price', format(
+                 round(ave_sale_price_by_year,digits =0),nsmall =0, big.mark = ',')))) +
         geom_point() + geom_vline(xintercept = nrow(nassau[nassau$Year == input$contract_year,])/  length(unique(
           nassau[nassau$Year == input$contract_year,"Town"]))) + geom_hline(yintercept = mean(nassau[nassau$Year== input$contract_year,'SoldPrice'])),
       tooltip = 'text'
