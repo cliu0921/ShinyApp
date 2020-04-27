@@ -5,68 +5,68 @@ dashboardPage(
   dashboardSidebar(
     #sidebar tabs for diff graph navigation
     sidebarMenu(
-      menuItem("Nassau County Home Sales",tabName = 'overview'), #add icon
+      menuItem("Nassau County",tabName = 'overview'), 
       menuItem('Monthly Trend',tabName = 'monthly_trend'),
-      menuItem('Breakdown by School District',tabName = 'SD'), #add icon late
-      menuItem('Days On Market Analysis', tabName = 'DOM'), #add icon later
-      menuItem('Annual Sales Analysis', tabName = 'sales') #add icon late
+      menuItem('Breakdown by School District',tabName = 'SD'), 
+      menuItem('Days On Market Analysis', tabName = 'DOM'), 
+      menuItem('Annual Sales Analysis', tabName = 'sales') 
     )
   ),
   dashboardBody(
+    shinyDashboardThemes(
+      theme = "grey_light"
+    ),
     #content for each tab
     tabItems(
       #firstpage
       tabItem(tabName = 'overview',
               h2('Nassau County Home Sales'),
               fluidRow(
-                box(plotOutput('sales_and_ave_price_plot'), title = 'Average Home Price and Total Sales',width = 12, solidHeader = TRUE, status = 'primary')
+                box(plotOutput('sales_and_ave_price_plot'),width = 12)
               )
               ),
               
       #seasonal tab
       tabItem(tabName = 'monthly_trend',
-              fluidRow(
-                column(width = 12,
-                  box(title= 'Monthly Analysis',
-                      selectizeInput('trend_type','Select Parameter', choices = contracts_saleprice),
-                      width = NULL,
-                      solidHeader = TRUE, status = 'primary'),
-                  box(plotOutput('months'), width = NULL, status = 'warning',solidHeader = TRUE)
+              
+                fluidRow(
+                  
+                  column(width = 12,
+                    box(title= 'Monthly Analysis',
+                        selectizeInput('trend_type','Select Parameter', choices = contracts_saleprice),
+                        width = NULL, status = 'success', solidHeader = TRUE),
+                    box(plotOutput('months'), width = NULL)
+                  )
                 )
-              )),
+              ),
       
       #2page
       tabItem(tabName = 'SD',
               h2("School District Analysis"), 
               fluidRow( 
                 box(title = 'School District',
-                    selectizeInput('SDselected','Select School District', choices = disctrict_names),
+                    selectizeInput('SDselected','Select', choices = disctrict_names),
                     solidHeader = TRUE, status = 'primary'),
-                box(plotOutput('trend',height = 250),status= 'primary',solidHeader = TRUE),
+                box(plotOutput('trend',height = 250)),
                 #make selected options NULL/ blank if time permits
-                box(plotlyOutput('bedrooms_by_sd',height = 250),width=12, title = 'Average Sale Price of Homes Within District',
-                    solidHeader = TRUE, status = 'warning'))),
+                box(plotlyOutput('bedrooms_by_sd',height = 400),width=12
+                    ))),
                     
               
-                #unused for now
-                #box(title = 'Number of Bedrooms',
-                #    selectizeInput('bedroomsselected','Select Number of Bedrooms',choices = number_bedrooms)),
-                #unused for now
-                #box(title = 'Design Type',
-                #    selectizeInput('typeselected','Select Design Type', choices = design)))), #potentially merge 3 options into 1 box
+                
 
       #3page
       tabItem(tabName = 'DOM',
-              h2('Days on Market (DOM) Analysis '),
+              h2('Days on Market Analysis '),
               fluidRow(
                 box(title = 'Year',
-                    selectizeInput('DOMyear','Select Year', choices = yearsDOM),solidHeader = TRUE, status = 'primary'),
+                    selectizeInput('DOMyear','Select', choices = yearsDOM),solidHeader = TRUE, status = 'primary'),
                 box(title = 'Price Range',
-                    sliderInput('domslider','Price Range of Home Sales:', min = minprice,max = maxprice,value = c(min, max)),
+                    sliderInput('domslider','Min and Max:', min = minprice,max = maxprice,value = c(min, max)),
                     solidHeader = TRUE, status = 'primary'),
-                box(plotOutput('DOM',height = 250),status = 'warning',title = 'Most DOM',solidHeader = TRUE),
-                box(plotOutput('DOM_reverse',height = 250),status ='warning', title= 'Least DOM',solidHeader = TRUE),
-                box(plotlyOutput('DOMscatter',height = 400),title = 'Average Sale Price by Average Days on Market',width = 12,status = 'success',
+                box(plotOutput('DOM',height = 250)),
+                box(plotOutput('DOM_reverse',height = 250)),
+                box(plotlyOutput('DOMscatter'),width = 12,
                     solidHeader = TRUE)
               )
             ),
@@ -75,14 +75,14 @@ dashboardPage(
               h2('Total Sales Analysis'),
               fluidRow(
                 box(title = 'Year',
-                    selectizeInput('contract_year','Select Year', choices = yearscontract), solidHeader = TRUE,
+                    selectizeInput('contract_year','Select', choices = yearscontract), solidHeader = TRUE,
                     status = 'primary'),
                 box(title = 'Price Range',
-                    sliderInput('contractslider','Price Range of Home Sales:', min = minprice,max = maxprice,value = c(min, max)),
+                    sliderInput('contractslider','Min and Max:', min = minprice,max = maxprice,value = c(min, max)),
                     solidHeader = TRUE,status = 'primary'),
-                box(plotOutput('sales',height = 250),status = 'warning', title= 'Most Sales',solidHeader = TRUE),
-                box(plotOutput('sales_least_to_most', height=250), status= 'warning',title= 'Least Sales ',solidHeader = TRUE),
-                box(plotlyOutput('contracts_scatterplot',height=400),title= 'Average Sale Price by Total Number of Sales',width = 12, status= 'success',
+                box(plotOutput('sales',height = 250)),
+                box(plotOutput('sales_least_to_most', height=250)),
+                box(plotlyOutput('contracts_scatterplot',height=400),width = 12,
                     solidHeader = TRUE),
               )
       )
