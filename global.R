@@ -6,6 +6,8 @@ library(tidyverse)
 library(lubridate)
 library(ggplot2)
 library(plotly)
+library(patchwork)
+
 
 nassau = read.csv('./data/nassau.csv',stringsAsFactors = FALSE)
 nassau = nassau %>% mutate(.,Sold = as.Date(Sold)) %>% filter(.,Town != "Plandome Manor")

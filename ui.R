@@ -17,7 +17,11 @@ dashboardPage(
     tabItems(
       #firstpage
       tabItem(tabName = 'overview',
-              h2('TBA')),
+              h2('TBA'),
+              fluidRow(
+                box(plotOutput('sales_and_ave_price_plot'), height = 500)
+              )
+              ),
               
       #seasonal tab
       tabItem(tabName = 'monthly_trend',
@@ -71,7 +75,8 @@ dashboardPage(
                 box(title = 'Price Range',
                     sliderInput('contractslider','Price Range of Home Sales:', min = minprice,max = maxprice,value = c(min, max))),
                 box(plotOutput('sales',height = 250)),
-                box(plotOutput('contracts_overtime', height=400))
+                box(plotOutput('sales_least_to_most', height=400)),
+                box(plotlyOutput('contracts_scatterplot',height=400)),
               )
       )
     )

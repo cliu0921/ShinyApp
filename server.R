@@ -1,8 +1,21 @@
 function(input, output,session) { 
   #plot1
+
+  output$sales_and_ave_price_plot = renderPlot({
+    ggplot(nassau %>% group_by(.,Sold) %>% summarise(.,plot1_ave_price = mean(SoldPrice), plot1_total_sales = n()) %>% 
+           filter(.,Sold != as.Date('2017-03-01') & Sold != as.Date('2020-03-01')),aes(x=Sold)) +
+    geom_smooth(aes(y= plot1_total_sales*1000),se = FALSE,span= 0.5) +
+    geom_smooth(aes(y=plot1_ave_price),se= FALSE, span = 0.3) + 
+    scale_y_continuous(
+      name = "ttest",
+      sec.axis = sec_axis(~./1000, name = 'test')) +
+    coord_cartesian(ylim = c(400000,900000))
+  })
+?sec_axis  
   
+
   
-  
+  #---------------------------------------------------------------------------------------------------------------------
   #plot trend
   output$trend = renderPlot({
     ggplot(
@@ -95,7 +108,7 @@ function(input, output,session) {
     }
     updateSliderInput(session, inputId = 'domslider', min = DOM_min_price, max = DOM_max_price, value = c(DOM_min_price,DOM_max_price))
   })
-
+#-----------------------------------------------------------------------------------------------------------------
   domtype = reactive({input$DOMyear})
   
   #descending order graph
@@ -193,8 +206,52 @@ function(input, output,session) {
                summarise(.,total_contracts = n()) %>% top_n(.,15,total_contracts),aes(x = reorder(Town,total_contracts),y= total_contracts))+
                geom_bar(stat = 'identity') + coord_flip()
     }})
-    
   
+  #
+  output$sales_least_to_most = renderPlot({
+    if( contracttype() == 'All'){
+      ggplot(nassau %>% filter(.,SoldPrice >= input$contractslider[1] & SoldPrice <= input$contractslider[2]) %>% group_by(.,Town) %>% 
+               summarise(.,total_contracts = n()) %>% top_n(.,-15,total_contracts),aes(x = reorder(Town,-total_contracts),y= total_contracts))+
+        geom_bar(stat = 'identity') + coord_flip()
+      
+    } else {
+      ggplot(nassau %>% filter(.,SoldPrice >= input$contractslider[1] & SoldPrice <= input$contractslider[2], Year == input$contract_year) %>% group_by(.,Town) %>% 
+               summarise(.,total_contracts = n()) %>% top_n(.,-15,total_contracts),aes(x = reorder(Town,-total_contracts),y= total_contracts))+
+        geom_bar(stat = 'identity') + coord_flip()
+    }})
+  
+  
+  #scatterplot 
+  output$contracts_scatterplot= renderPlotly({
+    if (contracttype() == 'All'){
+      #all condition
+      ggplotly(
+       ggplot(nassau %>% group_by(.,Town) %>% summarise(.,total_sales = n(), ave_sale_price = mean(SoldPrice)), aes( 
+         x = total_sales, y = ave_sale_price, group = Town, text = paste(
+           'Town:', Town, '</br></br>', 'Total Sales:', format(total_sales,nsmall=1,big.mark = ','), '</br>', 'Average Sale Price', format(
+             round(ave_sale_price,digits =0),nsmall =0, big.mark = ',')))) + 
+        geom_point() + geom_vline(xintercept = nrow(nassau)/96) + geom_hline(yintercept = mean(nassau$SoldPrice)),
+      tooltip = 'text'
+      )
+    } else {
+      #year selected condition
+      ggplotly(
+      ggplot(nassau %>% filter(.,Year == input$contract_year) %>% group_by(.,Town) %>% 
+               summarise(.,total_sales_by_year = n(), ave_sale_price_by_year = mean(SoldPrice)),
+             aes(x = total_sales_by_year, y = ave_sale_price_by_year, group = Town, text= paste(
+               'Town:', Town, '</br></br>', 'Total Sales:', format(total_sales,nsmall=1,big.mark = ','), '</br>', 'Average Sale Price', format(
+                 round(ave_sale_price,digits =0),nsmall =0, big.mark = ',')))) +
+        geom_point() + geom_vline(xintercept = nrow(nassau[nassau$Year == input$contract_year,])/  length(unique(
+          nassau[nassau$Year == input$contract_year,"Town"]))) + geom_hline(yintercept = mean(nassau[nassau$Year== input$contract_year,'SoldPrice'])),
+      tooltip = 'text'
+      )
+    }
+  })
+  
+    
+  # output$contracts_scatterplot = renderPlot({
+  #   
+  # })
   
   
   
