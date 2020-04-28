@@ -1,7 +1,7 @@
 
 
 dashboardPage(
-  dashboardHeader(title = 'Nassau Home Sales'),#figure out how to write title onto next line if time available
+  dashboardHeader(title = 'Nassau Home Sales'),
   dashboardSidebar(
     #sidebar tabs for diff graph navigation
     sidebarMenu(
@@ -18,7 +18,7 @@ dashboardPage(
     ),
     #content for each tab
     tabItems(
-      #firstpage
+      #nassau tab
       tabItem(tabName = 'overview',
               h2('Nassau County Home Sales'),
               fluidRow(
@@ -26,7 +26,7 @@ dashboardPage(
               )
               ),
               
-      #seasonal tab
+      #monthly trend
       tabItem(tabName = 'monthly_trend',
               
                 fluidRow(
@@ -40,7 +40,7 @@ dashboardPage(
                 )
               ),
       
-      #2page
+      #school district
       tabItem(tabName = 'SD',
               h2("School District Analysis"), 
               fluidRow( 
@@ -55,7 +55,7 @@ dashboardPage(
               
                 
 
-      #3page
+      #DOM
       tabItem(tabName = 'DOM',
               h2('Days on Market Analysis '),
               fluidRow(
@@ -70,7 +70,7 @@ dashboardPage(
                     solidHeader = TRUE)
               )
             ),
-      #4page
+      #total sales
       tabItem(tabName = 'sales',
               h2('Total Sales Analysis'),
               fluidRow(
